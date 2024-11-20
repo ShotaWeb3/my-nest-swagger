@@ -1,0 +1,18 @@
+services:
+  dev-postgres:
+    image: postgres:16.1-alpine
+    ports:
+      - 7890:5432
+    environment:
+      POSTGRES_USER: nestjs
+      POSTGRES_PASSWORD: nestjs
+      POSTGRES_DB: swagger
+    restart: always
+    networks:
+      - my-swagger
+    volumes:
+      - ./my-swagger-postgres-store:/var/lib/my-swagger/data
+networks:
+  my-swagger:
+volumes:
+  my-swagger-postgres-store:

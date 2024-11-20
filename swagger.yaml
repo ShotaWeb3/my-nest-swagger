@@ -1,25 +1,47 @@
 openapi: 3.0.0
 paths:
-  /:
-    get:
-      operationId: AppController_getHello
+  /test:
+    post:
+      description: テスト作成APIの説明
+      operationId: test-create
       parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestDto'
       responses:
         '200':
           description: ''
-      tags:
-        - App
-  /test:
-    post:
-      description: テストAPIの説明
-      operationId: TestController_create
-      parameters: []
-      responses:
-        '201':
-          description: ''
-      summary: テストAPI
-      tags:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTestResponseDto'
+      summary: テスト作成
+      tags: &ref_0
         - Test
+  /test/{id}:
+    get:
+      description: テスト取得APIの説明
+      operationId: test-get
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTestResponseDto'
+      security:
+        - bearer: []
+      summary: テスト取得
+      tags: *ref_0
 info:
   title: アプリケーション名
   description: APIの説明文
@@ -30,4 +52,69 @@ tags:
     description: ''
 servers: []
 components:
-  schemas: {}
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateTestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: テスト名
+          example: test
+        email:
+          type: string
+          description: メールアドレス
+          example: test@example.com
+        description:
+          type: string
+          description: テスト説明
+          example: test
+      required:
+        - name
+        - email
+    CreateTestResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID
+          example: 1
+        name:
+          type: string
+          description: メッセージ
+          example: test
+        email:
+          type: string
+          description: メールアドレス
+          example: test@example.com
+      required:
+        - id
+        - name
+        - email
+    GetTestResponseDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID
+          example: 1
+        name:
+          type: string
+          description: テスト名
+          example: test
+        email:
+          type: string
+          description: メールアドレス
+          example: test@example.com
+        description:
+          type: string
+          description: テスト説明
+          example: test
+      required:
+        - id
+        - name
+        - email

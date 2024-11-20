@@ -14,6 +14,7 @@ async function bootstrap() {
       .setTitle('アプリケーション名')
       .setDescription('APIの説明文')
       .setVersion('1.0')
+      .addBearerAuth()
       .addTag('APIタグ')
       .build()
 
