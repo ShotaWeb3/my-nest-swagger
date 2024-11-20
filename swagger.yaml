@@ -1,0 +1,33 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - App
+  /test:
+    post:
+      description: テストAPIの説明
+      operationId: TestController_create
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      summary: テストAPI
+      tags:
+        - Test
+info:
+  title: アプリケーション名
+  description: APIの説明文
+  version: '1.0'
+  contact: {}
+tags:
+  - name: APIタグ
+    description: ''
+servers: []
+components:
+  schemas: {}
