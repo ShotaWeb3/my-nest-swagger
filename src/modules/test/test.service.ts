@@ -1,7 +1,9 @@
 import { plainToInstance } from 'class-transformer'
 import { TestRepository } from '../../middleware/repositories/test.repository'
 import { CreateRequestTestDto, CreateTestResponseDto } from './dto.ts/test.dto'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class TestService {
   constructor(private readonly testRepository: TestRepository) {}
 
