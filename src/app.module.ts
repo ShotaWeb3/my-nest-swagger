@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { TestModule } from './test/test.module'
+import { TestModule } from './modules/test/test.module'
 import { PrismaModule } from './infrastructure/prisma/prisma.module'
 
 @Module({

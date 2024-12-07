@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer'
-import { TestRepository } from '../middleware/repositories/test.repository'
+import { TestRepository } from '../../middleware/repositories/test.repository'
 import { CreateRequestTestDto, CreateTestResponseDto } from './dto.ts/test.dto'
 
 export class TestService {
