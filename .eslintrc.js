@@ -23,10 +23,6 @@ module.exports = {
       'error',
       {
         semi: false,
-        singleQuote: true,
-        trailingComma: 'all',
-        printWidth: 120,
-        tabWidth: 2,
       },
     ],
   },

@@ -1,9 +1,12 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger'
-import { CreateTestDto, CreateTestResponseDto, GetTestResponseDto } from './dto.ts/test.dto'
-
+import { CreateRequestTestDto, CreateTestResponseDto, GetTestResponseDto } from './dto.ts/test.dto'
+import { TestService } from './test.service'
+import { plainToInstance } from 'class-transformer'
 @Controller('test')
 export class TestController {
+  constructor(private readonly testService: TestService) {}
+
   @Post()
   @ApiOperation({
     operationId: 'test-create',
@@ -17,12 +20,8 @@ export class TestController {
   @ApiOkResponse({
     type: CreateTestResponseDto,
   })
-  async create(@Body() body: CreateTestDto): Promise<CreateTestResponseDto> {
-    return {
-      id: 1,
-      name: body.name,
-      email: body.email,
-    }
+  async create(@Body() body: CreateRequestTestDto): Promise<CreateTestResponseDto> {
+    return await this.testService.create(body)
   }
 
   @Get(':id')
@@ -36,11 +35,7 @@ export class TestController {
   })
   @ApiBearerAuth()
   async get(@Param('id') id: number): Promise<GetTestResponseDto> {
-    return {
-      id,
-      name: 'test',
-      email: 'test@example.com',
-      description: 'テストの説明',
-    }
+    const result = await this.testService.findById(id)
+    return plainToInstance(GetTestResponseDto, result, { excludeExtraneousValues: true })
   }
 }

@@ -3,9 +3,15 @@ import { AppModule } from './app.module'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { writeFileSync } from 'fs'
 import { dump } from 'js-yaml'
+import {
+  BadRequestExceptionFilter,
+  NotFoundExceptionFilter,
+  ForbiddenExceptionFilter,
+} from './middleware/filters/http-exception.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  app.useGlobalFilters(new BadRequestExceptionFilter(), new NotFoundExceptionFilter(), new ForbiddenExceptionFilter())
   const isDevelopment = process.env.NODE_ENV !== 'production'
 
   if (isDevelopment) {

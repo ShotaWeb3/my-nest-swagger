@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Expose } from 'class-transformer'
 import { IsString, IsNotEmpty, IsEmail, IsNumber } from 'class-validator'
 
-export class CreateTestDto {
+export class CreateRequestTestDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
@@ -32,6 +33,7 @@ export class CreateTestDto {
 }
 
 export class CreateTestResponseDto {
+  @Expose()
   @IsNumber()
   @ApiProperty({
     description: 'ID',
@@ -41,6 +43,7 @@ export class CreateTestResponseDto {
   })
   id: number
 
+  @Expose()
   @IsString()
   @ApiProperty({
     description: 'メッセージ',
@@ -50,35 +53,7 @@ export class CreateTestResponseDto {
   })
   name: string
 
-  @IsEmail()
-  @ApiProperty({
-    description: 'メールアドレス',
-    example: 'test@example.com',
-    required: true,
-    type: String,
-  })
-  email: string
-}
-
-export class GetTestResponseDto {
-  @IsNumber()
-  @ApiProperty({
-    description: 'ID',
-    example: 1,
-    required: true,
-    type: Number,
-  })
-  id: number
-
-  @IsString()
-  @ApiProperty({
-    description: 'テスト名',
-    example: 'test',
-    required: true,
-    type: String,
-  })
-  name: string
-
+  @Expose()
   @IsEmail()
   @ApiProperty({
     description: 'メールアドレス',
@@ -88,6 +63,7 @@ export class GetTestResponseDto {
   })
   email: string
 
+  @Expose()
   @IsString()
   @ApiProperty({
     description: 'テスト説明',
@@ -97,3 +73,5 @@ export class GetTestResponseDto {
   })
   description?: string
 }
+
+export class GetTestResponseDto extends CreateTestResponseDto {}
