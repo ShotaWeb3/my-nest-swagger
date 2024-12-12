@@ -42,6 +42,22 @@ paths:
         - bearer: []
       summary: テスト取得
       tags: *ref_0
+  /test/download-csv:
+    post:
+      description: テストCSVダウンロードAPIの説明
+      operationId: test-download-csv
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DownloadCsvRequestDto'
+      responses:
+        '201':
+          description: ''
+      summary: テストCSVダウンロード
+      tags: *ref_0
 info:
   title: アプリケーション名
   description: APIの説明文
@@ -122,3 +138,12 @@ components:
         - id
         - name
         - email
+    DownloadCsvRequestDto:
+      type: object
+      properties:
+        formatType:
+          type: string
+          description: CSVフォーマットタイプ
+          example: A_TYPE
+      required:
+        - formatType

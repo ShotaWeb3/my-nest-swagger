@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Expose } from 'class-transformer'
-import { IsString, IsNotEmpty, IsEmail, IsNumber } from 'class-validator'
+import { IsString, IsNotEmpty, IsEmail, IsNumber, IsEnum } from 'class-validator'
 
 export class CreateRequestTestDto {
   @IsString()
@@ -75,3 +75,17 @@ export class CreateTestResponseDto {
 }
 
 export class GetTestResponseDto extends CreateTestResponseDto {}
+
+export enum CsvFormatType {
+  A_TYPE = 'A_TYPE',
+}
+export class DownloadCsvRequestDto {
+  @IsEnum(CsvFormatType)
+  @ApiProperty({
+    description: 'CSVフォーマットタイプ',
+    example: CsvFormatType.A_TYPE,
+    required: true,
+    type: String,
+  })
+  formatType: CsvFormatType
+}

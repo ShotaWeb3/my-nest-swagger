@@ -21,4 +21,14 @@ export class TestRepository {
       where: { id },
     })
   }
+
+  async *findAllChunk(chunkSize: number = 10) {
+    const totalCount = await this.prismaService.test.count()
+    for (let i = 0; i < totalCount; i += chunkSize) {
+      yield await this.prismaService.test.findMany({
+        skip: i,
+        take: chunkSize,
+      })
+    }
+  }
 }

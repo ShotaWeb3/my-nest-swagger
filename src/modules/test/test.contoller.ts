@@ -1,8 +1,14 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger'
-import { CreateRequestTestDto, CreateTestResponseDto, GetTestResponseDto } from './dto.ts/test.dto'
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common'
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiProduces, ApiResponse } from '@nestjs/swagger'
+import {
+  CreateRequestTestDto,
+  CreateTestResponseDto,
+  DownloadCsvRequestDto,
+  GetTestResponseDto,
+} from './dto.ts/test.dto'
 import { TestService } from './test.service'
 import { plainToInstance } from 'class-transformer'
+import { Response } from 'express'
 @Controller('test')
 export class TestController {
   constructor(private readonly testService: TestService) {}
@@ -37,5 +43,16 @@ export class TestController {
   async get(@Param('id') id: number): Promise<GetTestResponseDto> {
     const result = await this.testService.findById(id)
     return plainToInstance(GetTestResponseDto, result, { excludeExtraneousValues: true })
+  }
+
+  @ApiOperation({
+    operationId: 'test-download-csv',
+    summary: 'テストCSVダウンロード',
+    description: 'テストCSVダウンロードAPIの説明',
+  })
+  @ApiProduces('text/csv')
+  @Post('download-csv')
+  async downloadCsv(@Body() body: DownloadCsvRequestDto, @Res() response: Response): Promise<void> {
+    await this.testService.downloadCsv(body, response)
   }
 }
