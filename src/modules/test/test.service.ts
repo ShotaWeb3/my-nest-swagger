@@ -3,7 +3,7 @@ import { TestRepository } from '../../middleware/repositories/test.repository'
 import { CreateRequestTestDto, CreateTestResponseDto, CsvFormatType, DownloadCsvRequestDto } from './dto.ts/test.dto'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { match } from 'ts-pattern'
-import { ATypeCsvStrategy } from 'src/infrastructure/csv/a-type-csv-strategy'
+import { ATypeCsvStrategy } from '../../infrastructure/csv/a-type-csv-strategy'
 import { Response } from 'express'
 
 @Injectable()
