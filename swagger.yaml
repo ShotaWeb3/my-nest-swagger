@@ -54,7 +54,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DownloadCsvRequestDto'
       responses:
-        '201':
+        '200':
           description: ''
       summary: テストCSVダウンロード
       tags: *ref_0

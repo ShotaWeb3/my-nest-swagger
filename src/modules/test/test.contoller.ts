@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Res } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiProduces, ApiResponse } from '@nestjs/swagger'
 import {
   CreateRequestTestDto,
@@ -52,6 +52,7 @@ export class TestController {
   })
   @ApiProduces('text/csv')
   @Post('download-csv')
+  @HttpCode(HttpStatus.OK)
   async downloadCsv(@Body() body: DownloadCsvRequestDto, @Res() response: Response): Promise<void> {
     await this.testService.downloadCsv(body, response)
   }

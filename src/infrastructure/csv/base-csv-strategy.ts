@@ -29,8 +29,10 @@ export abstract class BaseCsvStrategy<T> implements ICsvStrategy<T> {
     csvStream.pipe(this.response)
 
     for await (const row of this.fetchData()) {
-      const formattedRow = this.formatData(row)
-      csvStream.write(formattedRow)
+      const formattedRows = this.formatData(row)
+      formattedRows.forEach((row) => {
+        csvStream.write(row)
+      })
     }
     csvStream.end()
   }

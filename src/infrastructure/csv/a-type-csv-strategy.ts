@@ -27,13 +27,23 @@ export class ATypeCsvStrategy extends BaseCsvStrategy<Test> {
   }
 
   formatData(data: Test[]): string[][] {
-    const formattedData = data.map(({ id, name, email, description, createdAt }) => [
+    const formattedData = data.map(({ id, name, email, description, createdAt }) => ({
       id,
       name,
       email,
       description,
-      createdAt,
-    ])
+      createdAt: createdAt
+        .toLocaleString('ja-JP', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        })
+        .replace(/\//g, '-'),
+    }))
     return formattedData.map((item) => this.headerMapping.map(({ key }) => item[key]))
   }
 
