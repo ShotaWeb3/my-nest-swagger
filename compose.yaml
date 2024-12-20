@@ -12,6 +12,35 @@ services:
       - my-swagger
     volumes:
       - ./my-swagger-postgres-store:/var/lib/my-swagger/data
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=sqs
+      - DEFAULT_REGION=ap-northeast-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - '${LOCALSTACK_VOLUME_DIR:-./my-localstack-store}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  localstack-init:
+    image: amazon/aws-cli
+    environment:
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - AWS_DEFAULT_REGION=ap-northeast-1
+    entrypoint: /bin/sh
+    volumes:
+      - ./init-aws.sh:/init-aws.sh
+    command: /init-aws.sh
+    depends_on:
+      localstack:
+        condition: service_healthy
 networks:
   my-swagger:
 volumes:
