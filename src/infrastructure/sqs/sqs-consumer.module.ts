@@ -2,9 +2,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { SqsModule } from '@ssut/nestjs-sqs'
 import { Module } from '@nestjs/common'
 import { MyQueueHandler } from './consumer/my-queue-handler'
+import { TestModule } from 'src/modules/test/test.module'
+import { RedisModule } from '@nestjs-modules/ioredis'
 
 @Module({
   imports: [
+    TestModule,
+    RedisModule,
     ConfigModule.forRoot(),
     SqsModule.registerAsync({
       imports: [ConfigModule],

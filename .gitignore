@@ -60,3 +60,5 @@ my-localstack-store
 
 # Postgres
 my-swagger-postgres-store
+
+my-redis-store

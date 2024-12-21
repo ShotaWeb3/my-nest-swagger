@@ -4,6 +4,7 @@ import {
   CreateRequestTestDto,
   CreateTestResponseDto,
   DownloadCsvRequestDto,
+  GetAsyncStatusResponseDto,
   GetTestResponseDto,
   SendAsyncMessageRequestDto,
   SendAsyncMessageResponseDto,
@@ -11,16 +12,10 @@ import {
 import { TestService } from './test.service'
 import { plainToInstance } from 'class-transformer'
 import { Response } from 'express'
-import { SqsService } from '@ssut/nestjs-sqs'
-import { ConfigService } from '@nestjs/config'
 
 @Controller('test')
 export class TestController {
-  constructor(
-    private readonly testService: TestService,
-    private readonly sqsService: SqsService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly testService: TestService) {}
 
   @Post()
   @ApiOperation({
@@ -59,6 +54,17 @@ export class TestController {
     summary: 'テストCSVダウンロード',
     description: 'テストCSVダウンロードAPIの説明',
   })
+  @ApiOkResponse({
+    description: 'テストCSVダウンロードAPIの説明',
+    content: {
+      'text/csv': {
+        schema: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @ApiProduces('text/csv')
   @Post('download-csv')
   @HttpCode(HttpStatus.OK)
@@ -78,9 +84,22 @@ export class TestController {
   @Post('send-async-message')
   @HttpCode(HttpStatus.OK)
   async sendAsyncMessage(@Body() body: SendAsyncMessageRequestDto): Promise<SendAsyncMessageResponseDto> {
-    await this.testService.sendAsyncMessage(body.message)
-    return {
-      status: 'success',
-    }
+    return await this.testService.sendAsyncMessage(body.message)
+  }
+
+  @ApiOperation({
+    operationId: 'test-get-async-status',
+    summary: '非同期メッセージステータス取得',
+    description: '非同期メッセージステータス取得APIの説明',
+  })
+  @ApiResponse({
+    status: 200,
+    type: GetAsyncStatusResponseDto,
+  })
+  @Get(':id/status')
+  @HttpCode(HttpStatus.OK)
+  async getAsyncStatus(@Param('id') id: string): Promise<GetAsyncStatusResponseDto> {
+    const status = await this.testService.getStatus(id)
+    return plainToInstance(GetAsyncStatusResponseDto, { status })
   }
 }

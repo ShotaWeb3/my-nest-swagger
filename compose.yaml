@@ -42,6 +42,16 @@ services:
     depends_on:
       localstack:
         condition: service_healthy
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    restart: always
+    networks:
+      - my-swagger
+    volumes:
+      - ./my-redis-store:/data
+    command: redis-server --appendonly yes
 networks:
   my-swagger:
 volumes:

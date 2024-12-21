@@ -111,5 +111,17 @@ export class SendAsyncMessageResponseDto {
     required: true,
     type: String,
   })
+  id: string
+}
+
+export class GetAsyncStatusResponseDto {
+  @Expose()
+  @IsString()
+  @ApiProperty({
+    description: 'ステータス',
+    example: 'success',
+    required: true,
+    type: String,
+  })
   status: string
 }

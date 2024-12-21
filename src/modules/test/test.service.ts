@@ -7,6 +7,8 @@ import { ATypeCsvStrategy } from '../../infrastructure/csv/a-type-csv-strategy'
 import { Response } from 'express'
 import { ConfigService } from '@nestjs/config'
 import { SqsService } from '@ssut/nestjs-sqs'
+import { RedisService } from '../../infrastructure/redis/redis.service'
+import { MyQueueMessage } from 'src/infrastructure/sqs/types/message'
 
 @Injectable()
 export class TestService {
@@ -14,6 +16,7 @@ export class TestService {
     private readonly testRepository: TestRepository,
     private readonly sqsService: SqsService,
     private readonly configService: ConfigService,
+    private readonly redisService: RedisService,
   ) {}
 
   async create(test: CreateRequestTestDto) {
@@ -42,6 +45,7 @@ export class TestService {
 
   async sendAsyncMessage(message: string) {
     const id = crypto.randomUUID()
+    await this.redisService.set(id, 'waiting')
     await this.sqsService.send(this.configService.get('AWS_SQS_QUEUE_NAME'), {
       id,
       body: {
@@ -50,5 +54,22 @@ export class TestService {
         timestamp: Date.now(),
       },
     })
+    return {
+      id,
+    }
+  }
+
+  async processHandleMessage(body: MyQueueMessage) {
+    await this.redisService.set(body.id, 'processing')
+    await new Promise((resolve) => setTimeout(resolve, 10000))
+    await this.redisService.set(body.id, 'done')
+  }
+
+  async processHandleError(body: MyQueueMessage) {
+    await this.redisService.set(body.id, 'error')
+  }
+
+  async getStatus(id: string) {
+    return await this.redisService.get(id)
   }
 }
