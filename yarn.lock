@@ -83,7 +83,7 @@
     "@smithy/util-utf8" "^2.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-sqs@^3.529.1", "@aws-sdk/client-sqs@^3.712.0":
+"@aws-sdk/client-sqs@^3.529.1", "@aws-sdk/client-sqs@^3.712.0", "@aws-sdk/client-sqs@^3.716.0":
   version "3.716.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-sqs/-/client-sqs-3.716.0.tgz#9631612a2cf807a45d22a32c23a175a489afa5a4"
   integrity sha512-nDpnXvmo65dDGw+/c/c6e/ic9HUvJRayzs9Rc4DdatsnAZE71gcWoLUBupJ/IOkNwgoVau0TDs9SRlmsuDsm1w==

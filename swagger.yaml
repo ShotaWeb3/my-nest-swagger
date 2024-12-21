@@ -58,6 +58,26 @@ paths:
           description: ''
       summary: テストCSVダウンロード
       tags: *ref_0
+  /test/send-async-message:
+    post:
+      description: 非同期メッセージ送信APIの説明
+      operationId: test-send-async-message
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendAsyncMessageRequestDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendAsyncMessageResponseDto'
+      summary: 非同期メッセージ送信
+      tags: *ref_0
 info:
   title: アプリケーション名
   description: APIの説明文
@@ -147,3 +167,21 @@ components:
           example: A_TYPE
       required:
         - formatType
+    SendAsyncMessageRequestDto:
+      type: object
+      properties:
+        message:
+          type: string
+          description: メッセージ
+          example: test
+      required:
+        - message
+    SendAsyncMessageResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: ID
+          example: success
+      required:
+        - status

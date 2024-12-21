@@ -34,6 +34,7 @@ services:
       - AWS_ACCESS_KEY_ID=dummy
       - AWS_SECRET_ACCESS_KEY=dummy
       - AWS_DEFAULT_REGION=ap-northeast-1
+      - AWS_DEFAULT_OUTPUT=json
     entrypoint: /bin/sh
     volumes:
       - ./init-aws.sh:/init-aws.sh

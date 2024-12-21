@@ -89,3 +89,27 @@ export class DownloadCsvRequestDto {
   })
   formatType: CsvFormatType
 }
+
+export class SendAsyncMessageRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'メッセージ',
+    example: 'test',
+    required: true,
+    type: String,
+  })
+  message: string
+}
+
+export class SendAsyncMessageResponseDto {
+  @Expose()
+  @IsString()
+  @ApiProperty({
+    description: 'ID',
+    example: 'success',
+    required: true,
+    type: String,
+  })
+  status: string
+}

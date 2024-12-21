@@ -5,13 +5,22 @@ import {
   CreateTestResponseDto,
   DownloadCsvRequestDto,
   GetTestResponseDto,
+  SendAsyncMessageRequestDto,
+  SendAsyncMessageResponseDto,
 } from './dto.ts/test.dto'
 import { TestService } from './test.service'
 import { plainToInstance } from 'class-transformer'
 import { Response } from 'express'
+import { SqsService } from '@ssut/nestjs-sqs'
+import { ConfigService } from '@nestjs/config'
+
 @Controller('test')
 export class TestController {
-  constructor(private readonly testService: TestService) {}
+  constructor(
+    private readonly testService: TestService,
+    private readonly sqsService: SqsService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -55,5 +64,23 @@ export class TestController {
   @HttpCode(HttpStatus.OK)
   async downloadCsv(@Body() body: DownloadCsvRequestDto, @Res() response: Response): Promise<void> {
     await this.testService.downloadCsv(body, response)
+  }
+
+  @ApiOperation({
+    operationId: 'test-send-async-message',
+    summary: '非同期メッセージ送信',
+    description: '非同期メッセージ送信APIの説明',
+  })
+  @ApiResponse({
+    status: 200,
+    type: SendAsyncMessageResponseDto,
+  })
+  @Post('send-async-message')
+  @HttpCode(HttpStatus.OK)
+  async sendAsyncMessage(@Body() body: SendAsyncMessageRequestDto): Promise<SendAsyncMessageResponseDto> {
+    await this.testService.sendAsyncMessage(body.message)
+    return {
+      status: 'success',
+    }
   }
 }
