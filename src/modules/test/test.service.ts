@@ -40,11 +40,15 @@ export class TestService {
     await strategy.generateCsv()
   }
 
-  async sendAsyncMessage(body: string) {
+  async sendAsyncMessage(message: string) {
     const id = crypto.randomUUID()
     await this.sqsService.send(this.configService.get('AWS_SQS_QUEUE_NAME'), {
       id,
-      body,
+      body: {
+        id,
+        message,
+        timestamp: Date.now(),
+      },
     })
   }
 }
