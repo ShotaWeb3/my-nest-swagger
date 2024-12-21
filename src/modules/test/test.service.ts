@@ -10,6 +10,12 @@ import { SqsService } from '@ssut/nestjs-sqs'
 import { RedisService } from '../../infrastructure/redis/redis.service'
 import { MyQueueMessage } from 'src/infrastructure/sqs/types/message'
 
+export enum AsyncMessageStatus {
+  WAITING = 'waiting',
+  PROCESSING = 'processing',
+  DONE = 'done',
+  ERROR = 'error',
+}
 @Injectable()
 export class TestService {
   constructor(
@@ -60,13 +66,14 @@ export class TestService {
   }
 
   async processHandleMessage(body: MyQueueMessage) {
-    await this.redisService.set(body.id, 'processing')
-    await new Promise((resolve) => setTimeout(resolve, 10000))
-    await this.redisService.set(body.id, 'done')
+    await this.redisService.set(body.id, AsyncMessageStatus.PROCESSING)
+    // 重たい処理
+    await new Promise((resolve) => setTimeout(resolve, 20000))
+    await this.redisService.set(body.id, AsyncMessageStatus.DONE)
   }
 
   async processHandleError(body: MyQueueMessage) {
-    await this.redisService.set(body.id, 'error')
+    await this.redisService.set(body.id, AsyncMessageStatus.ERROR)
   }
 
   async getStatus(id: string) {
